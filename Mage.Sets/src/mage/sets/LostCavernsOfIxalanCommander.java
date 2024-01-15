@@ -68,6 +68,7 @@ public final class LostCavernsOfIxalanCommander extends ExpansionSet {
         cards.add(new SetCardInfo("Choked Estuary", 322, Rarity.RARE, mage.cards.c.ChokedEstuary.class));
         cards.add(new SetCardInfo("Chromatic Orrery", 107, Rarity.MYTHIC, mage.cards.c.ChromaticOrrery.class));
         cards.add(new SetCardInfo("Cinder Glade", 323, Rarity.RARE, mage.cards.c.CinderGlade.class));
+        cards.add(new SetCardInfo("Clavileno, First of the Blessed", 2, Rarity.MYTHIC, mage.cards.c.ClavilenoFirstOfTheBlessed.class));
         cards.add(new SetCardInfo("Clifftop Retreat", 324, Rarity.RARE, mage.cards.c.ClifftopRetreat.class));
         cards.add(new SetCardInfo("Coat of Arms", 108, Rarity.RARE, mage.cards.c.CoatOfArms.class));
         cards.add(new SetCardInfo("Coercive Portal", 109, Rarity.MYTHIC, mage.cards.c.CoercivePortal.class));
@@ -207,6 +208,7 @@ public final class LostCavernsOfIxalanCommander extends ExpansionSet {
         cards.add(new SetCardInfo("Prime Speaker Zegana", 278, Rarity.MYTHIC, mage.cards.p.PrimeSpeakerZegana.class));
         cards.add(new SetCardInfo("Prismari Command", 279, Rarity.RARE, mage.cards.p.PrismariCommand.class));
         cards.add(new SetCardInfo("Progenitor's Icon", 100, Rarity.RARE, mage.cards.p.ProgenitorsIcon.class));
+        cards.add(new SetCardInfo("Promise of Aclazotz", 84, Rarity.RARE, mage.cards.p.PromiseOfAclazotz.class));
         cards.add(new SetCardInfo("Quandrix Command", 280, Rarity.RARE, mage.cards.q.QuandrixCommand.class));
         cards.add(new SetCardInfo("Quartzwood Crasher", 281, Rarity.RARE, mage.cards.q.QuartzwoodCrasher.class));
         cards.add(new SetCardInfo("Radiant Destiny", 135, Rarity.RARE, mage.cards.r.RadiantDestiny.class));
@@ -230,6 +232,7 @@ public final class LostCavernsOfIxalanCommander extends ExpansionSet {
         cards.add(new SetCardInfo("Return to Dust", 136, Rarity.UNCOMMON, mage.cards.r.ReturnToDust.class));
         cards.add(new SetCardInfo("Rhythm of the Wild", 287, Rarity.UNCOMMON, mage.cards.r.RhythmOfTheWild.class));
         cards.add(new SetCardInfo("Ripjaw Raptor", 253, Rarity.RARE, mage.cards.r.RipjawRaptor.class));
+        cards.add(new SetCardInfo("Ripples of Potential", 77, Rarity.RARE, mage.cards.r.RipplesOfPotential.class));
         cards.add(new SetCardInfo("Rishkar's Expertise", 254, Rarity.RARE, mage.cards.r.RishkarsExpertise.class));
         cards.add(new SetCardInfo("Rogue's Passage", 349, Rarity.UNCOMMON, mage.cards.r.RoguesPassage.class));
         cards.add(new SetCardInfo("Ruinous Intrusion", 255, Rarity.RARE, mage.cards.r.RuinousIntrusion.class));
