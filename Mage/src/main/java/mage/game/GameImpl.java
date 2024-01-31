@@ -1335,7 +1335,11 @@ public abstract class GameImpl implements Game {
             for (UUID playerId : state.getPlayerList(startingPlayerId)) {
                 for (DeckCardInfo info : gameOptions.perPlayerEmblemCards) {
                     Card card = EmblemOfCard.cardFromDeckInfo(info);
-                    addEmblem(new EmblemOfCard(card), card, playerId);
+                    Emblem emblem = new EmblemOfCard(card);
+                    addEmblem(emblem, card, playerId);
+                    for (Ability ability : emblem.getAbilities()) {
+                        state.addAbility(ability, null, emblem);
+                    }
                 }
             }
         }
@@ -1343,7 +1347,11 @@ public abstract class GameImpl implements Game {
         if (!gameOptions.globalEmblemCards.isEmpty()) {
             for (DeckCardInfo info : gameOptions.globalEmblemCards) {
                 Card card = EmblemOfCard.cardFromDeckInfo(info);
-                addEmblem(new EmblemOfCard(card), card, startingPlayerId);
+                Emblem emblem = new EmblemOfCard(card);
+                addEmblem(emblem, card, startingPlayerId);
+                for (Ability ability : emblem.getAbilities()) {
+                    state.addAbility(ability, null, emblem);
+                }
             }
         }
     }
@@ -1993,7 +2001,7 @@ public abstract class GameImpl implements Game {
             }
             newBluePrint.assignNewId();
             if (copyFromPermanent.isTransformed()) {
-                TransformAbility.transformPermanent(newBluePrint,this, source);
+                TransformAbility.transformPermanent(newBluePrint, this, source);
             }
             if (copyFromPermanent.isPrototyped()) {
                 Abilities<Ability> abilities = copyFromPermanent.getAbilities();
@@ -3552,13 +3560,14 @@ public abstract class GameImpl implements Game {
     public Map<MageObjectReference, Map<String, Object>> getPermanentCostsTags() {
         return state.getPermanentCostsTags();
     }
+
     @Override
-    public void storePermanentCostsTags(MageObjectReference permanentMOR, Ability source){
+    public void storePermanentCostsTags(MageObjectReference permanentMOR, Ability source) {
         state.storePermanentCostsTags(permanentMOR, source);
     }
 
     @Override
-    public void cheat(UUID ownerId, List<Card> library, List<Card> hand, List<PermanentCard> battlefield, List<Card> graveyard, List<Card> command) {
+    public void cheat(UUID ownerId, List<Card> library, List<Card> hand, List<PermanentCard> battlefield, List<Card> graveyard, List<Card> command, List<Card> exiled) {
         // fake test ability for triggers and events
         Ability fakeSourceAbilityTemplate = new SimpleStaticAbility(Zone.OUTSIDE, new InfoEffect("adding testing cards"));
         fakeSourceAbilityTemplate.setControllerId(ownerId);
@@ -3570,6 +3579,7 @@ public abstract class GameImpl implements Game {
             loadCards(ownerId, battlefield);
             loadCards(ownerId, graveyard);
             loadCards(ownerId, command);
+            loadCards(ownerId, exiled);
 
             for (Card card : library) {
                 player.getLibrary().putOnTop(card, this);
@@ -3593,6 +3603,11 @@ public abstract class GameImpl implements Game {
                 }
             } else if (!command.isEmpty()) {
                 throw new IllegalArgumentException("Command zone supports in commander test games");
+            }
+
+            for (Card card : exiled) {
+                card.setZone(Zone.EXILED, this);
+                getExile().add(card);
             }
 
             for (PermanentCard permanentCard : battlefield) {

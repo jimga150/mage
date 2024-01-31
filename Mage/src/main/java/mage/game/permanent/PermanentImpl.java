@@ -69,6 +69,7 @@ public abstract class PermanentImpl extends CardImpl implements Permanent {
     protected boolean transformed;
     protected boolean monstrous;
     protected boolean renowned;
+    protected boolean suspected;
     protected boolean manifested = false;
     protected boolean morphed = false;
     protected boolean ringBearerFlag = false;
@@ -94,6 +95,7 @@ public abstract class PermanentImpl extends CardImpl implements Permanent {
     // maximal number of creatures the creature can be blocked by  0 = no restriction
     protected int maxBlockedBy = 0;
     protected boolean deathtouched;
+    protected boolean solved = false;
 
     protected Map<String, List<UUID>> connectedCards = new HashMap<>();
     protected Set<MageObjectReference> dealtDamageByThisTurn;
@@ -144,6 +146,7 @@ public abstract class PermanentImpl extends CardImpl implements Permanent {
         this.blocking = permanent.blocking;
         this.maxBlocks = permanent.maxBlocks;
         this.deathtouched = permanent.deathtouched;
+        this.solved = permanent.solved;
         this.markedLifelink = permanent.markedLifelink;
         this.connectedCards = CardUtil.deepCopyObject(permanent.connectedCards);
         this.dealtDamageByThisTurn = CardUtil.deepCopyObject(permanent.dealtDamageByThisTurn);
@@ -162,6 +165,7 @@ public abstract class PermanentImpl extends CardImpl implements Permanent {
         this.transformed = permanent.transformed;
         this.monstrous = permanent.monstrous;
         this.renowned = permanent.renowned;
+        this.suspected = permanent.suspected;
         this.ringBearerFlag = permanent.ringBearerFlag;
         this.classLevel = permanent.classLevel;
         this.goadingPlayers.addAll(permanent.goadingPlayers);
@@ -392,8 +396,9 @@ public abstract class PermanentImpl extends CardImpl implements Permanent {
     /**
      * Add an ability to the permanent. When copying from an existing source
      * you should use the fromExistingObject variant of this function to prevent double-copying subabilities
-     * @param ability The ability to be added
-     * @param sourceId   id of the source doing the added (for the effect created to add it)
+     *
+     * @param ability  The ability to be added
+     * @param sourceId id of the source doing the added (for the effect created to add it)
      * @param game
      * @return The newly added ability copy
      */
@@ -403,11 +408,11 @@ public abstract class PermanentImpl extends CardImpl implements Permanent {
     }
 
     /**
-     * @param ability The ability to be added
-     * @param sourceId   id of the source doing the added (for the effect created to add it)
+     * @param ability            The ability to be added
+     * @param sourceId           id of the source doing the added (for the effect created to add it)
      * @param game
      * @param fromExistingObject if copying abilities from an existing source then must ignore sub-abilities because they're already on the source object
-     *                         Otherwise sub-abilities will be added twice to the resulting object
+     *                           Otherwise sub-abilities will be added twice to the resulting object
      * @return The newly added ability copy
      */
     @Override
@@ -1490,7 +1495,7 @@ public abstract class PermanentImpl extends CardImpl implements Permanent {
 
     @Override
     public boolean canBlock(UUID attackerId, Game game) {
-        if (tapped && game.getState().getContinuousEffects().asThough(this.getId(), AsThoughEffectType.BLOCK_TAPPED, null, this.getControllerId(), game).isEmpty() || isBattle(game)) {
+        if (tapped && game.getState().getContinuousEffects().asThough(this.getId(), AsThoughEffectType.BLOCK_TAPPED, null, this.getControllerId(), game).isEmpty() || isBattle(game) || isSuspected()) {
             return false;
         }
         Permanent attacker = game.getPermanent(attackerId);
@@ -1669,6 +1674,28 @@ public abstract class PermanentImpl extends CardImpl implements Permanent {
     @Override
     public void setRenowned(boolean value) {
         this.renowned = value;
+    }
+
+    @Override
+    public boolean isSuspected() {
+        return suspected;
+    }
+
+    private static final String suspectedInfoKey = "IS_SUSPECTED";
+
+    @Override
+    public void setSuspected(boolean value, Game game, Ability source) {
+        if (!value || !game.replaceEvent(GameEvent.getEvent(
+                EventType.BECOME_SUSPECTED, getId(),
+                source, source.getControllerId()
+        ))) {
+            this.suspected = value;
+        }
+        if (this.suspected) {
+            addInfo(suspectedInfoKey, CardUtil.addToolTipMarkTags("Suspected (has menace and can't block)"), game);
+        } else {
+            addInfo(suspectedInfoKey, null, game);
+        }
     }
 
     // Used as key for the ring bearer info.
@@ -1886,6 +1913,33 @@ public abstract class PermanentImpl extends CardImpl implements Permanent {
     @Override
     public boolean isRingBearer() {
         return ringBearerFlag;
+    }
+
+    @Override
+    public boolean isSolved() {
+        return solved;
+    }
+
+    @Override
+    public boolean solve(Game game, Ability source) {
+        if (this.solved) {
+            return false;
+        }
+        GameEvent event = new GameEvent(GameEvent.EventType.SOLVE_CASE, getId(),
+                source, source.getControllerId());
+        if (game.replaceEvent(event)) {
+            return false;
+        }
+        Player controller = game.getPlayer(source.getControllerId());
+        if (controller != null) {
+            game.informPlayers(controller.getLogName() + " solved " + this.getLogName() +
+                    CardUtil.getSourceLogName(game, source));
+        }
+
+        this.solved = true;
+        game.fireEvent(new GameEvent(EventType.CASE_SOLVED, getId(), source,
+                source.getControllerId()));
+        return true;
     }
 
     @Override
