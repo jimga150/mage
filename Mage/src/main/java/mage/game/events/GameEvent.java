@@ -470,7 +470,6 @@ public class GameEvent implements Serializable {
         EVOLVED_CREATURE,
         EMBALMED_CREATURE,
         ETERNALIZED_CREATURE,
-        TRAINED_CREATURE,
         ATTACH, ATTACHED,
         UNATTACH, UNATTACHED,
         /* ATTACH, ATTACHED,
@@ -585,6 +584,12 @@ public class GameEvent implements Serializable {
          playerId   the player paying the cost
          */
         EVIDENCE_COLLECTED,
+        /* Mentored Creature
+         targetId   creature that was mentored
+         sourceId   of the mentor ability
+         playerId   controller of the creature mentoring
+         */
+        MENTORED_CREATURE,
         //custom events
         CUSTOM_EVENT
     }
