@@ -72,6 +72,7 @@ public final class DoctorWho extends ExpansionSet {
         cards.add(new SetCardInfo("Desolate Lighthouse", 271, Rarity.RARE, mage.cards.d.DesolateLighthouse.class));
         cards.add(new SetCardInfo("Dinosaurs on a Spaceship", 122, Rarity.RARE, mage.cards.d.DinosaursOnASpaceship.class));
         cards.add(new SetCardInfo("Displaced Dinosaurs", 100, Rarity.UNCOMMON, mage.cards.d.DisplacedDinosaurs.class));
+        cards.add(new SetCardInfo("Donna Noble", 82, Rarity.RARE, mage.cards.d.DonnaNoble.class));
         cards.add(new SetCardInfo("Dragonskull Summit", 272, Rarity.RARE, mage.cards.d.DragonskullSummit.class));
         cards.add(new SetCardInfo("Dreamroot Cascade", 273, Rarity.RARE, mage.cards.d.DreamrootCascade.class));
         cards.add(new SetCardInfo("Drowned Catacomb", 274, Rarity.RARE, mage.cards.d.DrownedCatacomb.class));
@@ -200,6 +201,7 @@ public final class DoctorWho extends ExpansionSet {
         cards.add(new SetCardInfo("Surge of Brilliance", 57, Rarity.UNCOMMON, mage.cards.s.SurgeOfBrilliance.class));
         cards.add(new SetCardInfo("Swamp", 200, Rarity.LAND, mage.cards.basiclands.Swamp.class, NON_FULL_USE_VARIOUS));
         cards.add(new SetCardInfo("Swords to Plowshares", 212, Rarity.UNCOMMON, mage.cards.s.SwordsToPlowshares.class));
+        cards.add(new SetCardInfo("TARDIS", 187, Rarity.UNCOMMON, mage.cards.t.TARDIS.class));
         cards.add(new SetCardInfo("Talisman of Conviction", 247, Rarity.UNCOMMON, mage.cards.t.TalismanOfConviction.class));
         cards.add(new SetCardInfo("Talisman of Creativity", 248, Rarity.UNCOMMON, mage.cards.t.TalismanOfCreativity.class));
         cards.add(new SetCardInfo("Talisman of Curiosity", 249, Rarity.UNCOMMON, mage.cards.t.TalismanOfCuriosity.class));
