@@ -193,6 +193,7 @@ public final class MurdersAtKarlovManorCommander extends ExpansionSet {
         cards.add(new SetCardInfo("Psychosis Crawler", 234, Rarity.RARE, mage.cards.p.PsychosisCrawler.class));
         cards.add(new SetCardInfo("Ravenous Chupacabra", 136, Rarity.UNCOMMON, mage.cards.r.RavenousChupacabra.class));
         cards.add(new SetCardInfo("Reanimate", 137, Rarity.RARE, mage.cards.r.Reanimate.class));
+        cards.add(new SetCardInfo("Redemption Arc", 13, Rarity.RARE, mage.cards.r.RedemptionArc.class));
         cards.add(new SetCardInfo("Reliquary Tower", 282, Rarity.UNCOMMON, mage.cards.r.ReliquaryTower.class));
         cards.add(new SetCardInfo("Return of the Wildspeaker", 181, Rarity.RARE, mage.cards.r.ReturnOfTheWildspeaker.class));
         cards.add(new SetCardInfo("Rise of the Dark Realms", 138, Rarity.MYTHIC, mage.cards.r.RiseOfTheDarkRealms.class));
@@ -257,6 +258,8 @@ public final class MurdersAtKarlovManorCommander extends ExpansionSet {
         cards.add(new SetCardInfo("Temple of Triumph", 306, Rarity.RARE, mage.cards.t.TempleOfTriumph.class));
         cards.add(new SetCardInfo("Temple of the False God", 305, Rarity.UNCOMMON, mage.cards.t.TempleOfTheFalseGod.class));
         cards.add(new SetCardInfo("Temur War Shaman", 187, Rarity.RARE, mage.cards.t.TemurWarShaman.class));
+        cards.add(new SetCardInfo("Tesak, Judith's Hellhound", 36, Rarity.RARE, mage.cards.t.TesakJudithsHellhound.class, NON_FULL_USE_VARIOUS));
+        cards.add(new SetCardInfo("Tesak, Judith's Hellhound", 346, Rarity.RARE, mage.cards.t.TesakJudithsHellhound.class, NON_FULL_USE_VARIOUS));
         cards.add(new SetCardInfo("Tezzeret, Betrayer of Flesh", 120, Rarity.MYTHIC, mage.cards.t.TezzeretBetrayerOfFlesh.class));
         cards.add(new SetCardInfo("Thelonite Hermit", 188, Rarity.RARE, mage.cards.t.TheloniteHermit.class));
         cards.add(new SetCardInfo("Thought Monitor", 121, Rarity.RARE, mage.cards.t.ThoughtMonitor.class));

@@ -97,6 +97,7 @@ public final class MurdersAtKarlovManor extends ExpansionSet {
         cards.add(new SetCardInfo("Essence of Antiquity", 15, Rarity.UNCOMMON, mage.cards.e.EssenceOfAntiquity.class));
         cards.add(new SetCardInfo("Evidence Examiner", 201, Rarity.UNCOMMON, mage.cards.e.EvidenceExaminer.class));
         cards.add(new SetCardInfo("Exit Specialist", 55, Rarity.UNCOMMON, mage.cards.e.ExitSpecialist.class));
+        cards.add(new SetCardInfo("Expedited Inheritance", 123, Rarity.MYTHIC, mage.cards.e.ExpeditedInheritance.class));
         cards.add(new SetCardInfo("Ezrim, Agency Chief", 202, Rarity.RARE, mage.cards.e.EzrimAgencyChief.class));
         cards.add(new SetCardInfo("Fae Flight", 56, Rarity.UNCOMMON, mage.cards.f.FaeFlight.class));
         cards.add(new SetCardInfo("Faerie Snoop", 203, Rarity.COMMON, mage.cards.f.FaerieSnoop.class));
@@ -133,11 +134,15 @@ public final class MurdersAtKarlovManor extends ExpansionSet {
         cards.add(new SetCardInfo("Innocent Bystander", 133, Rarity.COMMON, mage.cards.i.InnocentBystander.class));
         cards.add(new SetCardInfo("Inside Source", 19, Rarity.COMMON, mage.cards.i.InsideSource.class));
         cards.add(new SetCardInfo("Insidious Roots", 208, Rarity.UNCOMMON, mage.cards.i.InsidiousRoots.class));
+        cards.add(new SetCardInfo("Intrude on the Mind", 61, Rarity.MYTHIC, mage.cards.i.IntrudeOnTheMind.class));
         cards.add(new SetCardInfo("Island", 273, Rarity.LAND, mage.cards.basiclands.Island.class, FULL_ART_BFZ_VARIOUS));
         cards.add(new SetCardInfo("It Doesn't Add Up", 89, Rarity.UNCOMMON, mage.cards.i.ItDoesntAddUp.class));
         cards.add(new SetCardInfo("Izoni, Center of the Web", 209, Rarity.RARE, mage.cards.i.IzoniCenterOfTheWeb.class));
         cards.add(new SetCardInfo("Jaded Analyst", 62, Rarity.COMMON, mage.cards.j.JadedAnalyst.class));
         cards.add(new SetCardInfo("Judith, Carnage Connoisseur", 210, Rarity.RARE, mage.cards.j.JudithCarnageConnoisseur.class));
+        cards.add(new SetCardInfo("Karlov Watchdog", 20, Rarity.UNCOMMON, mage.cards.k.KarlovWatchdog.class));
+        cards.add(new SetCardInfo("Kaya, Spirits' Justice", 211, Rarity.MYTHIC, mage.cards.k.KayaSpiritsJustice.class));
+        cards.add(new SetCardInfo("Kellan, Inquisitive Prodigy", 212, Rarity.RARE, mage.cards.k.KellanInquisitiveProdigy.class));
         cards.add(new SetCardInfo("Knife", 134, Rarity.UNCOMMON, mage.cards.k.Knife.class));
         cards.add(new SetCardInfo("Kraul Whipcracker", 213, Rarity.UNCOMMON, mage.cards.k.KraulWhipcracker.class));
         cards.add(new SetCardInfo("Krenko's Buzzcrusher", 136, Rarity.RARE, mage.cards.k.KrenkosBuzzcrusher.class));
