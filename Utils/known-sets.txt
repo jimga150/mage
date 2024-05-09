@@ -1,3 +1,4 @@
+Alchemy: Dominaria|AlchemyDominaria|
 Alchemy: Innistrad|AlchemyInnistrad|
 Adventures in the Forgotten Realms|AdventuresInTheForgottenRealms|
 Forgotten Realms Commander|ForgottenRealmsCommander|
@@ -10,6 +11,7 @@ Apocalypse|Apocalypse|
 Archenemy|Archenemy|
 Archenemy: Nicol Bolas|ArchenemyNicolBolas|
 Arabian Nights|ArabianNights|
+Arena Beginner Set|ArenaBeginnerSet|
 Arena League|ArenaLeague|
 Asia Pacific Land Program|AsiaPacificLandProgram|
 Assassin's Creed|AssassinsCreed|
@@ -180,6 +182,7 @@ Mirrodin Besieged|MirrodinBesieged|
 Modern Horizons|ModernHorizons|
 Modern Horizons 2|ModernHorizons2|
 Modern Horizons 3|ModernHorizons3|
+Modern Horizons 3 Commander|ModernHorizons3Commander|
 Modern Masters|ModernMasters|
 Modern Masters 2015|ModernMasters2015|
 Modern Masters 2017|ModernMasters2017|
@@ -194,6 +197,7 @@ Oath of the Gatewatch|OathOfTheGatewatch|
 Odyssey|Odyssey|
 Onslaught|Onslaught|
 Outlaws of Thunder Junction|OutlawsOfThunderJunction|
+Outlaws of Thunder Junction Commander|OutlawsOfThunderJunctionCommander|
 The Big Score|TheBigScore|
 Phyrexia: All Will Be One|PhyrexiaAllWillBeOne|
 Phyrexia: All Will Be One Commander|PhyrexiaAllWillBeOneCommander|
@@ -220,6 +224,7 @@ Saviors of Kamigawa|SaviorsOfKamigawa|
 Scars of Mirrodin|ScarsOfMirrodin|
 Scourge|Scourge|
 Secret Lair Drop|SecretLairDrop|
+Secret Lair Showdown|SecretLairShowdown|
 Seventh Edition|SeventhEdition|
 Shadowmoor|Shadowmoor|
 Shadows over Innistrad|ShadowsOverInnistrad|
@@ -227,6 +232,7 @@ Shards of Alara|ShardsOfAlara|
 Special Guests|SpecialGuests|
 Starter 1999|Starter1999|
 Starter 2000|Starter2000|
+Starter Commander Decks|StarterCommanderDecks|
 Star Wars|StarWars|
 Streets of New Capenna|StreetsOfNewCapenna|
 New Capenna Commander|NewCapennaCommander|

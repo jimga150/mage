@@ -57,6 +57,7 @@ public final class RavnicaClueEdition extends ExpansionSet {
         cards.add(new SetCardInfo("Conservatory", 14, Rarity.UNCOMMON, mage.cards.c.Conservatory.class));
         cards.add(new SetCardInfo("Consider", 84, Rarity.COMMON, mage.cards.c.Consider.class));
         cards.add(new SetCardInfo("Coordinated Assault", 128, Rarity.UNCOMMON, mage.cards.c.CoordinatedAssault.class));
+        cards.add(new SetCardInfo("Corporeal Projection", 28, Rarity.RARE, mage.cards.c.CorporealProjection.class));
         cards.add(new SetCardInfo("Corpse Churn", 107, Rarity.COMMON, mage.cards.c.CorpseChurn.class));
         cards.add(new SetCardInfo("Cosmotronic Wave", 129, Rarity.COMMON, mage.cards.c.CosmotronicWave.class));
         cards.add(new SetCardInfo("Council's Judgment", 57, Rarity.RARE, mage.cards.c.CouncilsJudgment.class));
@@ -115,6 +116,7 @@ public final class RavnicaClueEdition extends ExpansionSet {
         cards.add(new SetCardInfo("Hall", 16, Rarity.UNCOMMON, mage.cards.h.Hall.class));
         cards.add(new SetCardInfo("Hallowed Fountain", 277, Rarity.RARE, mage.cards.h.HallowedFountain.class));
         cards.add(new SetCardInfo("Havoc Jester", 138, Rarity.UNCOMMON, mage.cards.h.HavocJester.class));
+        cards.add(new SetCardInfo("Headliner Scarlett", 4, Rarity.RARE, mage.cards.h.HeadlinerScarlett.class));
         cards.add(new SetCardInfo("Helium Squirter", 87, Rarity.COMMON, mage.cards.h.HeliumSquirter.class));
         cards.add(new SetCardInfo("Hydroid Krasis", 195, Rarity.MYTHIC, mage.cards.h.HydroidKrasis.class));
         cards.add(new SetCardInfo("Hypersonic Dragon", 196, Rarity.RARE, mage.cards.h.HypersonicDragon.class));
@@ -145,7 +147,7 @@ public final class RavnicaClueEdition extends ExpansionSet {
         cards.add(new SetCardInfo("Living Lightning", 142, Rarity.UNCOMMON, mage.cards.l.LivingLightning.class));
         cards.add(new SetCardInfo("Lonis, Genetics Expert", 37, Rarity.RARE, mage.cards.l.LonisGeneticsExpert.class));
         cards.add(new SetCardInfo("Lounge", 19, Rarity.UNCOMMON, mage.cards.l.Lounge.class));
-        cards.add(new SetCardInfo("Martial Impetus", 65, Rarity.UNCOMMON, mage.cards.m.MartialImpetus.class));
+        cards.add(new SetCardInfo("Martial Impetus", 65, Rarity.COMMON, mage.cards.m.MartialImpetus.class));
         cards.add(new SetCardInfo("Masked Blackguard", 115, Rarity.COMMON, mage.cards.m.MaskedBlackguard.class));
         cards.add(new SetCardInfo("Master Biomancer", 200, Rarity.MYTHIC, mage.cards.m.MasterBiomancer.class));
         cards.add(new SetCardInfo("Mastermind Plum", 3, Rarity.RARE, mage.cards.m.MastermindPlum.class));
@@ -170,7 +172,7 @@ public final class RavnicaClueEdition extends ExpansionSet {
         cards.add(new SetCardInfo("Pitiless Gorgon", 203, Rarity.COMMON, mage.cards.p.PitilessGorgon.class));
         cards.add(new SetCardInfo("Plains", 254, Rarity.LAND, mage.cards.basiclands.Plains.class, NON_FULL_USE_VARIOUS));
         cards.add(new SetCardInfo("Predatory Impetus", 172, Rarity.COMMON, mage.cards.p.PredatoryImpetus.class));
-        cards.add(new SetCardInfo("Psychic Impetus", 92, Rarity.UNCOMMON, mage.cards.p.PsychicImpetus.class));
+        cards.add(new SetCardInfo("Psychic Impetus", 92, Rarity.COMMON, mage.cards.p.PsychicImpetus.class));
         cards.add(new SetCardInfo("Pyrewild Shaman", 144, Rarity.UNCOMMON, mage.cards.p.PyrewildShaman.class));
         cards.add(new SetCardInfo("Rakdos Carnarium", 243, Rarity.COMMON, mage.cards.r.RakdosCarnarium.class));
         cards.add(new SetCardInfo("Rakdos Guildgate", 244, Rarity.COMMON, mage.cards.r.RakdosGuildgate.class));
@@ -254,6 +256,7 @@ public final class RavnicaClueEdition extends ExpansionSet {
         cards.add(new SetCardInfo("Twilight Panther", 78, Rarity.COMMON, mage.cards.t.TwilightPanther.class));
         cards.add(new SetCardInfo("Undercover Butler", 49, Rarity.UNCOMMON, mage.cards.u.UndercoverButler.class));
         cards.add(new SetCardInfo("Underrealm Lich", 215, Rarity.MYTHIC, mage.cards.u.UnderrealmLich.class));
+        cards.add(new SetCardInfo("Unruly Krasis", 50, Rarity.RARE, mage.cards.u.UnrulyKrasis.class));
         cards.add(new SetCardInfo("Urbis Protector", 79, Rarity.UNCOMMON, mage.cards.u.UrbisProtector.class));
         cards.add(new SetCardInfo("Utvara Scalper", 153, Rarity.COMMON, mage.cards.u.UtvaraScalper.class));
         cards.add(new SetCardInfo("Venomous Hierophant", 125, Rarity.COMMON, mage.cards.v.VenomousHierophant.class));

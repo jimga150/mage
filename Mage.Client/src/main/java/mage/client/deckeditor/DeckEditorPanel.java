@@ -290,11 +290,10 @@ public class DeckEditorPanel extends javax.swing.JPanel {
     private Card retrieveTemporaryCard(SimpleCardView cardView) {
         Card card = temporaryCards.get(cardView.getId());
         if (card == null) {
-            // Need to make a new card
-            Logger.getLogger(DeckEditorPanel.class).info("Retrieve " + cardView.getCardNumber() + " Failed");
+            // need to make a new card (example: on duplicate, on show hidden cards)
             card = CardRepository.instance.findCard(cardView.getExpansionSetCode(), cardView.getCardNumber()).createCard();
         } else {
-            // Only need a temporary card once
+            // restore temp card (example: after drag to new zone)
             temporaryCards.remove(cardView.getId());
         }
         return card;
@@ -795,18 +794,14 @@ public class DeckEditorPanel extends javax.swing.JPanel {
         dialog.showDialog();
 
         if (!dialog.getTmpPath().isEmpty()) {
-            Deck deckToAppend = null;
             StringBuilder errorMessages = new StringBuilder();
 
             MageFrame.getDesktop().setCursor(new Cursor(Cursor.WAIT_CURSOR));
             try {
-                deckToAppend = Deck.load(DeckImporter.importDeckFromFile(dialog.getTmpPath(), errorMessages, false), true, true);
+                Deck deckToAppend = Deck.load(DeckImporter.importDeckFromFile(dialog.getTmpPath(), errorMessages, false), true, true);
                 processAndShowImportErrors(errorMessages);
-
-                if (deckToAppend != null) {
-                    deck = Deck.append(deckToAppend, deck);
-                    refreshDeck();
-                }
+                this.deck = Deck.append(deckToAppend, this.deck);
+                refreshDeck();
             } catch (GameException e1) {
                 JOptionPane.showMessageDialog(MageFrame.getDesktop(), e1.getMessage(), "Error loading deck", JOptionPane.ERROR_MESSAGE);
             } finally {
@@ -865,7 +860,7 @@ public class DeckEditorPanel extends javax.swing.JPanel {
 
             MageFrame.getDesktop().setCursor(new Cursor(Cursor.WAIT_CURSOR));
             try {
-                DeckFormats.writeDeck(needFileName, deck.getDeckCardLists());
+                DeckFormats.writeDeck(needFileName, deck.prepareCardsOnlyDeck());
 
                 try {
                     MageFrame.getPreferences().put("lastExportFolder", file.getCanonicalPath());
@@ -1014,7 +1009,7 @@ public class DeckEditorPanel extends javax.swing.JPanel {
         });
 
         btnGenDeck.setIcon(new javax.swing.ImageIcon(getClass().getResource("/buttons/card_panel.png"))); // NOI18N
-        btnGenDeck.setText("Random");
+        btnGenDeck.setText("Generate");
         btnGenDeck.setIconTextGap(1);
         btnGenDeck.setName("btnGenDeck"); // NOI18N
         btnGenDeck.addActionListener(new java.awt.event.ActionListener() {
@@ -1365,7 +1360,7 @@ public class DeckEditorPanel extends javax.swing.JPanel {
                     useDeckInfo = true;
                 }
                 MageFrame.getDesktop().setCursor(new Cursor(Cursor.WAIT_CURSOR));
-                DeckCardLists cardLists = deck.getDeckCardLists();
+                DeckCardLists cardLists = deck.prepareCardsOnlyDeck();
                 cardLists.setCardLayout(deckArea.getCardLayout());
                 cardLists.setSideboardLayout(deckArea.getSideboardLayout());
                 if (!useDeckInfo) {
@@ -1445,12 +1440,14 @@ public class DeckEditorPanel extends javax.swing.JPanel {
         if (mode == DeckEditorMode.SIDEBOARDING
                 || mode == DeckEditorMode.LIMITED_BUILDING
                 || mode == DeckEditorMode.LIMITED_SIDEBOARD_BUILDING) {
+            // in game mode - move all to sideboard
             for (Card card : deck.getCards()) {
                 deck.getSideboard().add(card);
             }
             deck.getCards().clear();
             cardSelector.loadSideboard(new ArrayList<>(deck.getSideboard()), this.bigCard);
         } else {
+            // in deck editor mode - clear all cards
             deck = new Deck();
         }
         refreshDeck();
@@ -1470,6 +1467,9 @@ public class DeckEditorPanel extends javax.swing.JPanel {
         try {
             MageFrame.getDesktop().setCursor(new Cursor(Cursor.WAIT_CURSOR));
             String path = DeckGenerator.generateDeck();
+            if (path == null) {
+                return;
+            }
             deck = Deck.load(DeckImporter.importDeckFromFile(path, false), true, true);
         } catch (GameException ex) {
             JOptionPane.showMessageDialog(MageFrame.getDesktop(), ex.getMessage(), "Error loading generated deck", JOptionPane.ERROR_MESSAGE);
@@ -1486,7 +1486,7 @@ public class DeckEditorPanel extends javax.swing.JPanel {
             updateDeckTask.cancel(true);
         }
 
-        if (SessionHandler.submitDeck(mode, tableId, deck.getDeckCardLists())) {
+        if (SessionHandler.submitDeck(mode, tableId, deck.prepareCardsOnlyDeck())) {
             removeDeckEditor();
         }
     }//GEN-LAST:event_btnSubmitActionPerformed
@@ -1502,7 +1502,7 @@ public class DeckEditorPanel extends javax.swing.JPanel {
                 updateDeckTask.cancel(true);
             }
 
-            if (SessionHandler.submitDeck(mode, tableId, deck.getDeckCardLists())) {
+            if (SessionHandler.submitDeck(mode, tableId, deck.prepareCardsOnlyDeck())) {
                 SwingUtilities.invokeLater(this::removeDeckEditor);
             }
             return null;
@@ -1615,7 +1615,7 @@ class UpdateDeckTask extends SwingWorker<Void, Void> {
     @Override
     protected Void doInBackground() throws Exception {
         while (!isCancelled()) {
-            SessionHandler.updateDeck(tableId, deck.getDeckCardLists());
+            SessionHandler.updateDeck(tableId, deck.prepareCardsOnlyDeck());
             TimeUnit.SECONDS.sleep(5);
         }
         return null;

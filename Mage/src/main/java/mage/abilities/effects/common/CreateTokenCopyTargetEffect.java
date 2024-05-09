@@ -61,7 +61,7 @@ public class CreateTokenCopyTargetEffect extends OneShotEffect {
     private final int tokenPower;
     private final int tokenToughness;
     private boolean useLKI = false;
-    private PermanentModifier permanentModifier = null; // TODO: miss copy constructor? Make serializable?
+    private PermanentModifier permanentModifier = null;
 
     // TODO: These constructors are a mess. Copy effects need to be reworked altogether, hopefully clean it up then.
 
@@ -154,6 +154,7 @@ public class CreateTokenCopyTargetEffect extends OneShotEffect {
         this.tokenPower = effect.tokenPower;
         this.tokenToughness = effect.tokenToughness;
         this.useLKI = effect.useLKI;
+        this.permanentModifier = effect.permanentModifier;
     }
 
     @Override
@@ -274,9 +275,8 @@ public class CreateTokenCopyTargetEffect extends OneShotEffect {
             Permanent tokenPermanent = game.getPermanent(tokenId);
             if (tokenPermanent != null) {
                 addedTokenPermanents.add(tokenPermanent);
-                // add counters if necessary ie Ochre Jelly
-                if (counter != null
-                        && numberOfCounters > 0) {
+                // TODO: Workaround to add counters to all created tokens, necessary for correct interactions with cards like Chatterfang, Squirrel General and Ochre Jelly / Printlifter Ooze. See #10786
+                if (counter != null && numberOfCounters > 0) {
                     tokenPermanent.addCounters(counter.createInstance(numberOfCounters), source.getControllerId(), source, game);
                 }
             }

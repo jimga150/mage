@@ -568,9 +568,17 @@ public class GameController implements GameCallback {
                 }
             }
             break;
-            case CONCEDE:
-                game.concede(getPlayerId(userId));
+            case CONCEDE: {
+                UUID playerId = getPlayerId(userId);
+                if (playerId != null) {
+                    Player player = game.getPlayer(playerId);
+                    if (player != null) {
+                        game.informPlayers(player.getLogName() + " want to concede");
+                        game.setConcedingPlayer(getPlayerId(userId));
+                    }
+                }
                 break;
+            }
             case MANA_AUTO_PAYMENT_OFF:
                 game.setManaPaymentMode(getPlayerId(userId), false);
                 break;
@@ -600,7 +608,7 @@ public class GameController implements GameCallback {
                     }
                 }
                 break;
-            case REVOKE_PERMISSIONS_TO_SEE_HAND_CARDS:
+            case REVOKE_PERMISSIONS_TO_SEE_HAND_CARDS: {
                 UUID playerId = getPlayerId(userId);
                 if (playerId != null) {
                     Player player = game.getPlayer(playerId);
@@ -609,6 +617,7 @@ public class GameController implements GameCallback {
                     }
                 }
                 break;
+            }
             case REQUEST_PERMISSION_TO_SEE_HAND_CARDS:
                 if (data instanceof UUID) {
                     requestPermissionToSeeHandCards(userId, (UUID) data);
@@ -822,7 +831,7 @@ public class GameController implements GameCallback {
     }
 
     private synchronized void choosePile(UUID playerId, final String message, final List<? extends Card> pile1, final List<? extends Card> pile2) throws MageException {
-        perform(playerId, playerId1 -> getGameSession(playerId1).choosePile(message, new CardsView(game, pile1), new CardsView(game, pile2)));
+        perform(playerId, playerId1 -> getGameSession(playerId1).choosePile(message, new CardsView(game, pile1, playerId), new CardsView(game, pile2, playerId)));
     }
 
     private synchronized void chooseMode(UUID playerId, final Map<UUID, String> modes, final String message) throws MageException {
@@ -836,12 +845,7 @@ public class GameController implements GameCallback {
     private synchronized void target(UUID playerId, final String question, final Cards cards, final List<Permanent> perms, final Set<UUID> targets, final boolean required, final Map<String, Serializable> options) throws MageException {
         perform(playerId, playerId1 -> {
             if (cards != null) {
-                // Zone targetZone = (Zone) options.get("targetZone");
-                // Are there really situations where a player selects from a list of face down cards?
-                // So always show face up for selection
-                // boolean showFaceDown = targetZone != null && targetZone.equals(Zone.PICK);
-                boolean showFaceDown = true;
-                getGameSession(playerId1).target(question, new CardsView(game, cards.getCards(game), showFaceDown, true), targets, required, options);
+                getGameSession(playerId1).target(question, new CardsView(game, cards.getCards(game), playerId, true), targets, required, options);
             } else if (perms != null) {
                 CardsView permsView = new CardsView();
                 for (Permanent perm : perms) {

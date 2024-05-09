@@ -183,20 +183,15 @@ public class TestPlayer implements Player {
         targets.add(target);
     }
 
-    public void addAlias(String name, UUID Id) {
-        aliases.put(name, Id);
+    public void addAlias(String aliasId, UUID objectId) {
+        if (aliases.containsKey(aliasId)) {
+            throw new IllegalArgumentException("Alias with same aliasId already exists: " + aliasId);
+        }
+        aliases.put(aliasId, objectId);
     }
 
-    public ManaOptions getAvailableManaTest(Game game) {
+    public ManaOptions getAvailableManaTest(Game game) { // TODO: remove
         return computerPlayer.getManaAvailable(game);
-    }
-
-    public void addAction(int turnNum, PhaseStep step, String action) {
-        actions.add(new PlayerAction("", turnNum, step, action));
-    }
-
-    public void addAction(String actionName, int turnNum, PhaseStep step, String action) {
-        actions.add(new PlayerAction(actionName, turnNum, step, action));
     }
 
     public void addAction(PlayerAction playerAction) {
@@ -552,11 +547,6 @@ public class TestPlayer implements Player {
             result = false;
         }
         return result;
-    }
-
-    @Override
-    public int getActionCount() {
-        return actions.size();
     }
 
     @Override
@@ -1216,15 +1206,16 @@ public class TestPlayer implements Player {
                 .map(c -> (((c instanceof PermanentToken) ? "[T] " : "[C] ")
                         + c.getIdName()
                         + (c.isCopy() ? " [copy of " + c.getCopyFrom().getId().toString().substring(0, 3) + "]" : "")
+                        + " class " + c.getMainCard().getClass().getSimpleName() + ""
                         + " - " + c.getPower().getValue() + "/" + c.getToughness().getValue()
                         + (c.isPlaneswalker(game) ? " - L" + c.getCounters(game).getCount(CounterType.LOYALTY) : "")
                         + ", " + (c.isTapped() ? "Tapped" : "Untapped")
                         + getPrintableAliases(", [", c.getId(), "]")
                         + (c.getAttachedTo() == null ? ""
-                                : ", attached to "
-                                        + (game.getObject(c.getAttachedTo()) == null
-                                                ? game.getPlayer(c.getAttachedTo()).getName()
-                                                : game.getObject(c.getAttachedTo()).getIdName()))))
+                        : ", attached to "
+                        + (game.getObject(c.getAttachedTo()) == null
+                        ? game.getPlayer(c.getAttachedTo()).getName()
+                        : game.getObject(c.getAttachedTo()).getIdName()))))
                 .sorted()
                 .collect(Collectors.toList());
 
@@ -2378,7 +2369,7 @@ public class TestPlayer implements Player {
             }
         }
 
-        this.chooseStrictModeFailed("choice", game, getInfo(game.getObject(source)) + ";\n" + getInfo(target));
+        this.chooseStrictModeFailed("choice", game, getInfo(source, game) + "\n" + getInfo(target));
         return computerPlayer.choose(outcome, target, source, game, options);
     }
 
@@ -2691,7 +2682,7 @@ public class TestPlayer implements Player {
         }
 
         // wrong target settings by addTarget
-        // how to fix: implement target class processing above
+        // how to fix: implement target class processing above (if it a permanent target then check "filter instanceof" code too)
         if (!targets.isEmpty()) {
             String message;
 
@@ -2700,13 +2691,13 @@ public class TestPlayer implements Player {
                         + "\nCard: " + source.getSourceObject(game)
                         + "\nAbility: " + source.getClass().getSimpleName() + " (" + source.getRule() + ")"
                         + "\nTarget: " + target.getClass().getSimpleName() + " (" + target.getMessage() + ")"
-                        + "\nYou must implement target class support in TestPlayer or setup good targets";
+                        + "\nYou must implement target class support in TestPlayer, \"filter instanceof\", or setup good targets";
             } else {
                 message = this.getName() + " - Targets list was setup by addTarget with " + targets + ", but not used"
                         + "\nCard: unknown source"
                         + "\nAbility: unknown source"
                         + "\nTarget: " + target.getClass().getSimpleName() + " (" + target.getMessage() + ")"
-                        + "\nYou must implement target class support in TestPlayer or setup good targets";
+                        + "\nYou must implement target class support in TestPlayer, \"filter instanceof\", or setup good targets";
             }
             Assert.fail(message);
         }
@@ -3770,11 +3761,6 @@ public class TestPlayer implements Player {
     }
 
     @Override
-    public void addAction(String action) {
-        computerPlayer.addAction(action);
-    }
-
-    @Override
     public void setAllowBadMoves(boolean allowBadMoves) {
         computerPlayer.setAllowBadMoves(allowBadMoves);
     }
@@ -3827,6 +3813,16 @@ public class TestPlayer implements Player {
     @Override
     public void setDrawsOnOpponentsTurn(boolean drawsOnOpponentsTurn) {
         computerPlayer.setDrawsOnOpponentsTurn(drawsOnOpponentsTurn);
+    }
+
+    @Override
+    public boolean canPlotFromTopOfLibrary() {
+        return computerPlayer.canPlotFromTopOfLibrary();
+    }
+
+    @Override
+    public void setPlotFromTopOfLibrary(boolean canPlotFromTopOfLibrary) {
+        computerPlayer.setPlotFromTopOfLibrary(canPlotFromTopOfLibrary);
     }
 
     @Override
@@ -4138,7 +4134,7 @@ public class TestPlayer implements Player {
             assertWrongChoiceUsage(choices.size() > 0 ? choices.get(0) : "empty list");
         }
 
-        this.chooseStrictModeFailed("choice", game, getInfo(target));
+        this.chooseStrictModeFailed("choice", game, getInfo(source, game) + "\n" + getInfo(target));
         return computerPlayer.choose(outcome, cards, target, source, game);
     }
 

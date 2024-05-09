@@ -11,6 +11,7 @@ import mage.abilities.keyword.FlashbackAbility;
 import mage.abilities.keyword.ReconfigureAbility;
 import mage.abilities.keyword.SunburstAbility;
 import mage.abilities.mana.ActivatedManaAbilityImpl;
+import mage.cards.mock.MockableCard;
 import mage.cards.repository.PluginClassloaderRegistery;
 import mage.constants.*;
 import mage.counters.Counter;
@@ -58,12 +59,15 @@ public abstract class CardImpl extends MageObjectImpl implements Card {
     protected CardImpl(UUID ownerId, CardSetInfo setInfo, CardType[] cardTypes, String costs) {
         this(ownerId, setInfo, cardTypes, costs, SpellAbilityType.BASE);
     }
+
     protected CardImpl(UUID ownerId, CardSetInfo setInfo, CardType[] cardTypes, String costs, SpellAbilityType spellAbilityType) {
         this(ownerId, setInfo.getName());
 
         this.rarity = setInfo.getRarity();
         this.setExpansionSetCode(setInfo.getExpansionSetCode());
         this.setCardNumber(setInfo.getCardNumber());
+        this.setImageFileName(""); // use default
+        this.setImageNumber(0);
         this.cardType.addAll(Arrays.asList(cardTypes));
         this.manaCost.load(costs);
         setDefaultColor();
@@ -119,12 +123,24 @@ public abstract class CardImpl extends MageObjectImpl implements Card {
         ownerId = card.ownerId;
         rarity = card.rarity;
 
+        // TODO: wtf, do not copy card sides cause it must be re-created each time (see details in getSecondCardFace)
+        //  must be reworked to normal copy and workable transform without such magic
+
+        nightCard = card.nightCard;
         secondSideCardClazz = card.secondSideCardClazz;
         secondSideCard = null; // will be set on first getSecondCardFace call if card has one
-        nightCard = card.nightCard;
+        if (card.secondSideCard instanceof MockableCard) {
+            // workaround to support gui's mock cards
+            secondSideCard = card.secondSideCard.copy();
+        }
+
         meldsWithClazz = card.meldsWithClazz;
         meldsToClazz = card.meldsToClazz;
         meldsToCard = null; // will be set on first getMeldsToCard call if card has one
+        if (card.meldsToCard instanceof MockableCard) {
+            // workaround to support gui's mock cards
+            meldsToCard = card.meldsToCard.copy();
+        }
 
         spellAbility = null; // will be set on first getSpellAbility call if card has one
         flipCard = card.flipCard;
@@ -201,6 +217,11 @@ public abstract class CardImpl extends MageObjectImpl implements Card {
     @Override
     public Rarity getRarity() {
         return rarity;
+    }
+
+    @Override
+    public void setRarity(Rarity rarity) {
+        this.rarity = rarity;
     }
 
     @Override
@@ -360,7 +381,12 @@ public abstract class CardImpl extends MageObjectImpl implements Card {
     @Override
     public void setOwnerId(UUID ownerId) {
         this.ownerId = ownerId;
-        abilities.setControllerId(ownerId);
+        this.abilities.setControllerId(ownerId);
+    }
+
+    @Override
+    public UUID getControllerOrOwnerId() {
+        return getOwnerId();
     }
 
     @Override
@@ -549,7 +575,7 @@ public abstract class CardImpl extends MageObjectImpl implements Card {
     }
 
     @Override
-    public void checkForCountersToAdd(Permanent permanent, Ability source, Game game) {
+    public void applyEnterWithCounters(Permanent permanent, Ability source, Game game) {
         Counters countersToAdd = game.getEnterWithCounters(permanent.getId());
         if (countersToAdd != null) {
             for (Counter counter : countersToAdd.values()) {
@@ -579,6 +605,14 @@ public abstract class CardImpl extends MageObjectImpl implements Card {
                     ability.setRuleVisible(true);
                 }
             }
+            // The current face down implementation is just setting a boolean, so any trigger checking for a
+            // permanent property once being turned face up is not seeing the right face up data.
+            // For instance triggers looking for specific subtypes being turned face up (Detectives in MKM set)
+            // are broken without that processAction call.
+            // This is somewhat a band-aid on the special action nature of turning a permanent face up.
+            // 708.8. As a face-down permanent is turned face up, its copiable values revert to its normal copiable values.
+            // Any effects that have been applied to the face-down permanent still apply to the face-up permanent.
+            game.getState().processAction(game);
             game.fireEvent(GameEvent.getEvent(GameEvent.EventType.TURNED_FACE_UP, getId(), source, playerId));
             return true;
         }
@@ -620,6 +654,8 @@ public abstract class CardImpl extends MageObjectImpl implements Card {
         if (secondSideCard == null) {
             secondSideCard = initSecondSideCard(secondSideCardClazz);
             if (secondSideCard != null && secondSideCard.getSpellAbility() != null) {
+                // TODO: wtf, why it set cast mode here?! Transform tests fails without it
+                //  must be reworked without that magic, also see CardImpl'constructor for copy code
                 secondSideCard.getSpellAbility().setSourceId(this.getId());
                 secondSideCard.getSpellAbility().setSpellAbilityType(SpellAbilityType.BASE_ALTERNATE);
                 secondSideCard.getSpellAbility().setSpellAbilityCastMode(SpellAbilityCastMode.TRANSFORMED);
@@ -694,6 +730,11 @@ public abstract class CardImpl extends MageObjectImpl implements Card {
     }
 
     @Override
+    public void setUsesVariousArt(boolean usesVariousArt) {
+        this.usesVariousArt = usesVariousArt;
+    }
+
+    @Override
     public Counters getCounters(Game game) {
         return getCounters(game.getState());
     }
@@ -701,13 +742,6 @@ public abstract class CardImpl extends MageObjectImpl implements Card {
     @Override
     public Counters getCounters(GameState state) {
         return state.getCardState(this.objectId).getCounters();
-    }
-
-    /**
-     * @return The controller if available otherwise the owner.
-     */
-    protected UUID getControllerOrOwner() {
-        return ownerId;
     }
 
     @Override
@@ -781,35 +815,46 @@ public abstract class CardImpl extends MageObjectImpl implements Card {
     }
 
     @Override
-    public void removeCounters(String name, int amount, Ability source, Game game) {
+    public void removeCounters(String name, int amount, Ability source, Game game, boolean isDamage) {
+
+        if (amount <= 0){
+            return;
+        }
+
+        if (getCounters(game).getCount(name) <= 0){
+            return;
+        }
+
+        GameEvent removeCountersEvent = new RemoveCountersEvent(name, this, source, amount, isDamage);
+        if (game.replaceEvent(removeCountersEvent)){
+            return;
+        }
+
         int finalAmount = 0;
-        for (int i = 0; i < amount; i++) {
+        for (int i = 0; i < removeCountersEvent.getAmount(); i++) {
+
+            GameEvent event = new RemoveCounterEvent(name, this, source, isDamage);
+            if (game.replaceEvent(event)){
+                continue;
+            }
+
             if (!getCounters(game).removeCounter(name, 1)) {
                 break;
             }
-            GameEvent event = GameEvent.getEvent(GameEvent.EventType.COUNTER_REMOVED, objectId, source, getControllerOrOwner());
-            if (source != null
-                    && source.getControllerId() != null) {
-                event.setPlayerId(source.getControllerId()); // player who controls the source ability that removed the counter
-            }
-            event.setData(name);
+
+            event = new CounterRemovedEvent(name, this, source, isDamage);
             game.fireEvent(event);
+
             finalAmount++;
         }
-        GameEvent event = GameEvent.getEvent(GameEvent.EventType.COUNTERS_REMOVED, objectId, source, getControllerOrOwner());
-        if (source != null
-                && source.getControllerId() != null) {
-            event.setPlayerId(source.getControllerId()); // player who controls the source ability that removed the counter
-        }
-        event.setData(name);
-        event.setAmount(finalAmount);
+        GameEvent event = new CountersRemovedEvent(name, this, source, finalAmount, isDamage);
         game.fireEvent(event);
     }
 
     @Override
-    public void removeCounters(Counter counter, Ability source, Game game) {
+    public void removeCounters(Counter counter, Ability source, Game game, boolean isDamage) {
         if (counter != null) {
-            removeCounters(counter.getName(), counter.getCount(), source, game);
+            removeCounters(counter.getName(), counter.getCount(), source, game, isDamage);
         }
     }
 

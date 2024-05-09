@@ -27,6 +27,7 @@ import mage.player.ai.ComputerPlayerMCTS;
 import mage.players.ManaPool;
 import mage.players.Player;
 import mage.server.game.GameSessionPlayer;
+import mage.util.ThreadUtils;
 import mage.utils.SystemUtil;
 import mage.util.CardUtil;
 import mage.view.GameView;
@@ -235,6 +236,8 @@ public abstract class CardTestPlayerAPIImpl extends MageTestPlayerBase implement
         if (currentGame == null || activePlayer == null) {
             throw new IllegalStateException("Game is not initialized. Use load method to load a test case and initialize a game.");
         }
+
+        ThreadUtils.ensureRunInGameThread();
 
         // check stop command
         int maxTurn = 1;
@@ -689,7 +692,9 @@ public abstract class CardTestPlayerAPIImpl extends MageTestPlayerBase implement
                 ));
                 if (!aliasName.isEmpty()) {
                     // TODO: is it bugged with double faced cards (wrong ref)?
-                    player.addAlias(player.generateAliasName(aliasName, useAliasMultiNames, i + 1), newCard.getId());
+                    // add to all players
+                    String aliasId = player.generateAliasName(aliasName, useAliasMultiNames, i + 1);
+                    currentGame.getPlayers().values().forEach(pl -> ((TestPlayer) pl).addAlias(aliasId, newCard.getId()));
                 }
             }
         } else {
@@ -701,7 +706,9 @@ public abstract class CardTestPlayerAPIImpl extends MageTestPlayerBase implement
                 Card newCard = cardInfo.createCard();
                 cards.add(newCard);
                 if (!aliasName.isEmpty()) {
-                    player.addAlias(player.generateAliasName(aliasName, useAliasMultiNames, i + 1), newCard.getId());
+                    // add to all players
+                    String aliasId = player.generateAliasName(aliasName, useAliasMultiNames, i + 1);
+                    currentGame.getPlayers().values().forEach(pl -> ((TestPlayer) pl).addAlias(aliasId, newCard.getId()));
                 }
             }
         }
@@ -1064,7 +1071,7 @@ public abstract class CardTestPlayerAPIImpl extends MageTestPlayerBase implement
     /**
      * Assert counter count on a permanent
      *
-     * @param cardName Name of the cards that should be counted.
+     * @param cardName Name of the card that should be counted.
      * @param type     Type of the counter that should be counted.
      * @param count    Expected count.
      */
@@ -1072,7 +1079,28 @@ public abstract class CardTestPlayerAPIImpl extends MageTestPlayerBase implement
         this.assertCounterCount(null, cardName, type, count);
     }
 
+    /**
+     * Assert counter count on a permanent
+     *
+     * @param player   Player who owns the card named cardName
+     * @param cardName Name of the card that should be counted.
+     * @param type     Type of the counter that should be counted.
+     * @param count    Expected count.
+     */
     public void assertCounterCount(Player player, String cardName, CounterType type, int count) throws AssertionError {
+        this.assertCounterCount(player, cardName, type.getName(), count);
+    }
+
+    /**
+     * Assert counter count on a permanent
+     *
+     * @param player        Player who owns the card named cardName
+     * @param cardName      Name of the card that should be counted.
+     * @param counterName   Name of the counter that should be counted.
+     *                      (for custom ability counters, use getRule() from the ability)
+     * @param count         Expected count.
+     */
+    public void assertCounterCount(Player player, String cardName, String counterName, int count) throws AssertionError {
         //Assert.assertNotEquals("", cardName);
         Permanent found = null;
         for (Permanent permanent : currentGame.getBattlefield().getAllActivePermanents()) {
@@ -1082,7 +1110,7 @@ public abstract class CardTestPlayerAPIImpl extends MageTestPlayerBase implement
             }
         }
         Assert.assertNotNull("There is no such permanent " + (player == null ? "" : "for player " + player.getName()) + " on the battlefield, cardName=" + cardName, found);
-        Assert.assertEquals("(Battlefield) Counter counts are not equal (" + cardName + ':' + type + ')', count, found.getCounters(currentGame).getCount(type));
+        Assert.assertEquals("(Battlefield) Counter counts are not equal (" + cardName + ':' + counterName + ')', count, found.getCounters(currentGame).getCount(counterName));
     }
 
     /**

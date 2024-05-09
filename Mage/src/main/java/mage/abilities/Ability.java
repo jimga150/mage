@@ -36,15 +36,6 @@ import java.util.UUID;
 public interface Ability extends Controllable, Serializable {
 
     /**
-     * Gets the globally unique id of the ability contained within the game.
-     *
-     * @return A {@link java.util.UUID} which the game will use to store and
-     * retrieve the exact instance of this ability.
-     */
-    @Override
-    UUID getId();
-
-    /**
      * Assigns a new {@link java.util.UUID}
      *
      * @see mage.players.PlayerImpl#playAbility(mage.abilities.ActivatedAbility,
@@ -72,12 +63,29 @@ public interface Ability extends Controllable, Serializable {
     AbilityType getAbilityType();
 
     /**
-     * Gets the id of the player in control of this ability.
-     *
-     * @return The {@link java.util.UUID} of the controlling player.
+     * If this ability is an activated one (mana included).
      */
-    @Override
-    UUID getControllerId();
+    boolean isActivatedAbility();
+
+    /**
+     * If this ability is a triggered one (mana included).
+     */
+    boolean isTriggeredAbility();
+
+    /**
+     * If this ability is an activated one, excluding mana.
+     */
+    boolean isNonManaActivatedAbility();
+
+    /**
+     * If this ability is a mana activated one.
+     */
+    boolean isManaActivatedAbility();
+
+    /**
+     * If this ability is a mana ability, (both triggered and activated can be mana abilities).
+     */
+    boolean isManaAbility();
 
     /**
      * Sets the id of the controller of this ability.
@@ -530,6 +538,14 @@ public interface Ability extends Controllable, Serializable {
      * @return
      */
     Ability withFirstModeFlavorWord(String flavorWord);
+
+    /**
+     * Sets cost word for first mode
+     *
+     * @param cost
+     * @return
+     */
+    Ability withFirstModeCost(Cost cost);
 
     /**
      * Creates the message about the ability casting/triggering/activating to

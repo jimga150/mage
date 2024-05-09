@@ -19,7 +19,6 @@ import mage.cards.CardImpl;
 import mage.cards.CardSetInfo;
 import mage.constants.*;
 import mage.counters.CounterType;
-import mage.filter.common.FilterControlledCreaturePermanent;
 import mage.game.Game;
 import mage.players.Player;
 import mage.target.common.TargetControlledCreaturePermanent;
@@ -50,7 +49,7 @@ public final class FalcoSparaPactweaver extends CardImpl {
         this.addAbility(new EntersBattlefieldAbility(
                 new AddCountersSourceEffect(CounterType.SHIELD.createInstance(1)),
                 "with a shield counter on it. <i>(If it would be dealt damage "
-                + "or destroyed, remove a shield counter from it instead.)</i>"
+                        + "or destroyed, remove a shield counter from it instead.)</i>"
         ));
 
         // You may look at the top card of your library any time.
@@ -76,7 +75,7 @@ public final class FalcoSparaPactweaver extends CardImpl {
 class FalcoSparaPactweaverEffect extends AsThoughEffectImpl {
 
     FalcoSparaPactweaverEffect() {
-        super(AsThoughEffectType.PLAY_FROM_NOT_OWN_HAND_ZONE, Duration.WhileOnBattlefield, Outcome.AIDontUseIt);
+        super(AsThoughEffectType.CAST_FROM_NOT_OWN_HAND_ZONE, Duration.WhileOnBattlefield, Outcome.AIDontUseIt);
         staticText = "you may cast spells from the top of your library by removing "
                 + "a counter from a creature you control in addition to paying their other costs";
     }
@@ -115,7 +114,7 @@ class FalcoSparaPactweaverEffect extends AsThoughEffectImpl {
         }
 
         Costs<Cost> newCosts = new CostsImpl<>();
-        newCosts.add(new RemoveCounterCost(new TargetControlledCreaturePermanent(1, 1, new FilterControlledCreaturePermanent(), true)));
+        newCosts.add(new RemoveCounterCost(new TargetControlledCreaturePermanent().withNotTarget(true)));
         newCosts.addAll(cardToCheck.getSpellAbility().getCosts());
         player.setCastSourceIdWithAlternateMana(
                 cardToCheck.getId(), cardToCheck.getManaCost(), newCosts,

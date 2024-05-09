@@ -36,7 +36,7 @@ public abstract class Emblem extends CommandObjectImpl {
     protected MageObject sourceObject; // can be null
     private boolean copy;
     private MageObject copyFrom; // copied card INFO (used to call original adjusters)
-    private FrameStyle frameStyle;
+    protected FrameStyle frameStyle;
     private Abilities<Ability> abilites = new AbilitiesImpl<>();
 
     public Emblem(String name) {
@@ -49,7 +49,7 @@ public abstract class Emblem extends CommandObjectImpl {
         this.controllerId = emblem.controllerId;
         this.sourceObject = emblem.sourceObject;
         this.copy = emblem.copy;
-        this.copyFrom = (emblem.copyFrom != null ? emblem.copyFrom : null);
+        this.copyFrom = emblem.copyFrom;
         this.abilites = emblem.abilites.copy();
     }
 
@@ -69,6 +69,7 @@ public abstract class Emblem extends CommandObjectImpl {
         if (foundInfo != null) {
             this.setExpansionSetCode(foundInfo.getSetCode());
             this.setCardNumber("");
+            this.setImageFileName(""); // use default
             this.setImageNumber(foundInfo.getImageNumber());
         } else {
             // how-to fix: add emblem to the tokens-database
@@ -97,6 +98,11 @@ public abstract class Emblem extends CommandObjectImpl {
     public void setControllerId(UUID controllerId) {
         this.controllerId = controllerId;
         this.abilites.setControllerId(controllerId);
+    }
+
+    @Override
+    public UUID getControllerOrOwnerId() {
+        return getControllerId();
     }
 
     @Override

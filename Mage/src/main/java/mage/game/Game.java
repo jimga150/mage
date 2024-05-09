@@ -269,11 +269,17 @@ public interface Game extends MageItem, Serializable, Copyable<Game> {
 
     boolean isSimulation();
 
-    void setSimulation(boolean checkPlayableState);
+    /**
+     * Prepare game for any simulations like AI or effects calc
+     */
+    Game createSimulationForAI();
+
+    /**
+     * Prepare game for any playable calc (available mana/abilities)
+     */
+    Game createSimulationForPlayableCalc();
 
     boolean inCheckPlayableState();
-
-    void setCheckPlayableState(boolean checkPlayableState);
 
     MageObject getLastKnownInformation(UUID objectId, Zone zone);
 
@@ -503,6 +509,7 @@ public interface Game extends MageItem, Serializable, Copyable<Game> {
      */
     void applyEffects();
 
+    @Deprecated // TODO: must research usage and remove it from all non engine code (example: Bestow ability, ProcessActions must be used instead)
     boolean checkStateAndTriggered();
 
     void playPriority(UUID activePlayerId, boolean resuming);
@@ -589,6 +596,9 @@ public interface Game extends MageItem, Serializable, Copyable<Game> {
 
     boolean executingRollback();
 
+    /**
+     * Add counters to permanent before ETB. Use it before put real permanent to battlefield.
+     */
     void setEnterWithCounters(UUID sourceId, Counters counters);
 
     Counters getEnterWithCounters(UUID sourceId);

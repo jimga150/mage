@@ -34,7 +34,7 @@ public abstract class TargetImpl implements Target {
     protected boolean chosen = false;
     // is the target handled as targeted spell/ability (notTarget = true is used for not targeted effects like e.g. sacrifice)
     protected boolean notTarget = false;
-    protected boolean atRandom = false;
+    protected boolean atRandom = false; // for inner choose logic
     protected UUID targetController = null; // if null the ability controller is the targetController
     protected UUID abilityController = null; // only used if target controller != ability controller
 
@@ -203,7 +203,9 @@ public abstract class TargetImpl implements Target {
 
     @Override
     public boolean isRequired(Ability ability) {
-        return ability == null || ability.isActivated() || !(ability.getAbilityType() == AbilityType.SPELL || ability.getAbilityType() == AbilityType.ACTIVATED);
+        return ability == null
+                || ability.isActivated()
+                || !(ability.getAbilityType() == AbilityType.SPELL || ability.getAbilityType().isActivatedAbility());
     }
 
     @Override
@@ -675,10 +677,10 @@ public abstract class TargetImpl implements Target {
         String abilityText = source.getRule(true).toLowerCase();
         boolean strictModeEnabled = player.getStrictChooseMode();
         boolean canAutoChoose = this.getMinNumberOfTargets() == this.getMaxNumberOfTargets() // Targets must be picked
-                                && possibleTargets.size() == this.getNumberOfTargets() - this.getSize() // Available targets are equal to the number that must be picked
-                                && !strictModeEnabled  // Test AI is not set to strictChooseMode(true)
-                                && playerAutoTargetLevel > 0 // Human player has enabled auto-choose in settings
-                                && !abilityText.contains("search"); // Do not autochoose for any effects which involve searching
+                && possibleTargets.size() == this.getNumberOfTargets() - this.getSize() // Available targets are equal to the number that must be picked
+                && !strictModeEnabled  // Test AI is not set to strictChooseMode(true)
+                && playerAutoTargetLevel > 0 // Human player has enabled auto-choose in settings
+                && !abilityText.contains("search"); // Do not autochoose for any effects which involve searching
 
 
         if (canAutoChoose) {

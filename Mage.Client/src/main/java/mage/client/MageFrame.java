@@ -87,7 +87,6 @@ import java.util.prefs.Preferences;
 public class MageFrame extends javax.swing.JFrame implements MageClient {
 
     private static final String TITLE_NAME = "XMage";
-    private static final Logger logger = Logger.getLogger(MageFrame.class);
 
     private static final Logger LOGGER = Logger.getLogger(MageFrame.class);
     private static final String LITE_MODE_ARG = "-lite";
@@ -398,7 +397,7 @@ public class MageFrame extends javax.swing.JFrame implements MageClient {
     }
 
     private void bootstrapSetsAndFormats() {
-        logger.info("Loading sets and formats...");
+        LOGGER.info("Loading sets and formats...");
         ConstructedFormats.ensureLists();
     }
 
@@ -1460,7 +1459,7 @@ public class MageFrame extends javax.swing.JFrame implements MageClient {
             try {
                 instance = new MageFrame();
             } catch (Throwable e) {
-                logger.fatal("Critical error on start up, app will be closed: " + e.getMessage(), e);
+                LOGGER.fatal("Critical error on start up, app will be closed: " + e.getMessage(), e);
                 System.exit(1);
             }
 
@@ -1517,7 +1516,11 @@ public class MageFrame extends javax.swing.JFrame implements MageClient {
 
     public void setConnectButtonText(String status) {
         this.btnConnect.setText(status);
-        changeGUISize(); // Needed to layout the tooltbar after text length change
+
+        // Needed to layout the tooltbar after text length change
+        // TODO: need research, is it actual?
+        GUISizeHelper.refreshGUIAndCards();
+
         this.btnConnect.repaint();
         this.btnConnect.revalidate();
     }
@@ -1741,8 +1744,13 @@ public class MageFrame extends javax.swing.JFrame implements MageClient {
         }
     }
 
-    public void changeGUISize() {
-        ImageCaches.flush();
+    /**
+     * Refresh whole GUI including cards and card images.
+     * Use it after new images downloaded, new fonts or theme settings selected.
+     */
+    public void refreshGUIAndCards() {
+        ImageCaches.clearAll();
+
         setGUISize();
 
         setGUISizeTooltipContainer();
