@@ -6,7 +6,7 @@ import mage.abilities.Ability;
 import mage.abilities.common.SimpleStaticAbility;
 import mage.abilities.common.SpellCastOpponentTriggeredAbility;
 import mage.abilities.effects.ContinuousEffectImpl;
-import mage.abilities.effects.ReplacementEffectImpl;
+import mage.abilities.effects.PreventionEffectImpl;
 import mage.cards.Card;
 import mage.constants.*;
 import mage.abilities.keyword.FlashAbility;
@@ -66,12 +66,12 @@ public final class WeepingAngel extends CardImpl {
 // Adapted from LoseCreatureTypeSourceEffect
 class WeepingAngelMarbleizeEffect extends ContinuousEffectImpl {
     
-    public WeepingAngelMarbleizeEffect() {
+    WeepingAngelMarbleizeEffect() {
         super(Duration.EndOfTurn, Layer.TypeChangingEffects_4, SubLayer.NA, Outcome.Detriment);
         staticText = "{this} isn't a creature until end of turn.";
     }
 
-    protected WeepingAngelMarbleizeEffect(final WeepingAngelMarbleizeEffect effect) {
+    private WeepingAngelMarbleizeEffect(final WeepingAngelMarbleizeEffect effect) {
         super(effect);
     }
 
@@ -108,11 +108,11 @@ class WeepingAngelMarbleizeEffect extends ContinuousEffectImpl {
     }
 }
 
-// Based on PhyrexianVindicatorEffect
-class WeepingAngelDamageEffect extends ReplacementEffectImpl {
+// Based on PreventDamageAndRemoveCountersEffect
+class WeepingAngelDamageEffect extends PreventionEffectImpl {
 
-    public WeepingAngelDamageEffect() {
-        super(Duration.WhileOnBattlefield, Outcome.PreventDamage);
+    WeepingAngelDamageEffect() {
+        super(Duration.WhileOnBattlefield, Integer.MAX_VALUE, true, false);
         staticText = "If {this} would deal combat damage to a creature, " +
                 "prevent that damage and that creature's owner shuffles it into their library.";
     }
@@ -141,14 +141,9 @@ class WeepingAngelDamageEffect extends ReplacementEffectImpl {
     }
 
     @Override
-    public boolean checksEventType(GameEvent event, Game game) {
-        return event.getType() == GameEvent.EventType.DAMAGE_PERMANENT;
-    }
-
-    @Override
     public boolean applies(GameEvent event, Ability source, Game game) {
         Permanent permanent = game.getPermanentOrLKIBattlefield(event.getTargetId());
-        if (permanent == null || !permanent.isCreature()){
+        if (permanent == null || !permanent.isCreature(game)){
             return false;
         }
         return event.getSourceId().equals(source.getSourceId()) && ((DamagePermanentEvent) event).isCombatDamage();
