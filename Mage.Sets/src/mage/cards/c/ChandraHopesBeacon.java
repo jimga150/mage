@@ -5,7 +5,7 @@ import mage.MageObjectReference;
 import mage.abilities.Ability;
 import mage.abilities.LoyaltyAbility;
 import mage.abilities.common.SpellCastControllerTriggeredAbility;
-import mage.abilities.dynamicvalue.common.GetXLoyaltyValue;
+import mage.abilities.dynamicvalue.common.GetXValue;
 import mage.abilities.effects.AsThoughEffectImpl;
 import mage.abilities.effects.OneShotEffect;
 import mage.abilities.effects.common.CopyTargetStackObjectEffect;
@@ -41,7 +41,7 @@ public class ChandraHopesBeacon extends CardImpl {
                 new CopyTargetStackObjectEffect(true).withText("it"),
                 StaticFilters.FILTER_SPELL_AN_INSTANT_OR_SORCERY,
                 false, SetTargetPointer.SPELL
-        ).setTriggersOnceEachTurn(true));
+        ).setTriggersLimitEachTurn(1));
 
         //+2: Add two mana in any combination of colors.
         this.addAbility(new LoyaltyAbility(new AddManaInAnyCombinationEffect(2), 2));
@@ -52,7 +52,7 @@ public class ChandraHopesBeacon extends CardImpl {
 
         //−X: Chandra, Hope’s Beacon deals X damage to each of up to two targets.
         LoyaltyAbility loyaltyAbility = new LoyaltyAbility(new DamageTargetEffect(
-                GetXLoyaltyValue.instance, true, "each of up to two targets"
+                GetXValue.instance, true, "each of up to two targets"
         ));
         loyaltyAbility.addTarget(new TargetAnyTarget(0, 2));
         this.addAbility(loyaltyAbility);

@@ -10,7 +10,6 @@ import mage.abilities.costs.mana.ManaCost;
 import mage.abilities.costs.mana.ManaCostsImpl;
 import mage.abilities.costs.mana.VariableManaCost;
 import mage.abilities.effects.Effect;
-import mage.cards.Card;
 import mage.game.Game;
 import mage.game.combat.Combat;
 import mage.game.events.GameEvent;
@@ -34,8 +33,11 @@ public final class SimulatedPlayer2 extends ComputerPlayer {
 
     private static final Logger logger = Logger.getLogger(SimulatedPlayer2.class);
 
+    private static final boolean AI_SIMULATE_ALL_BAD_AND_GOOD_TARGETS = false; // TODO: enable and do performance test (it's increase calculations by x2, but is it useful?)
+
+    // warning, simulated player do not restore own data by game rollback
     private final boolean isSimulatedPlayer;
-    private transient ConcurrentLinkedQueue<Ability> allActions;
+    private transient ConcurrentLinkedQueue<Ability> allActions; // all possible abilities to play (copies with already selected targets)
     private final Player originalPlayer; // copy of the original player, source of choices/results in tests
 
     public SimulatedPlayer2(Player originalPlayer, boolean isSimulatedPlayer) {
@@ -54,10 +56,24 @@ public final class SimulatedPlayer2 extends ComputerPlayer {
     }
 
     @Override
+    public void restore(Player player) {
+        // simulated player can be created from any player type
+        if (!originalPlayer.getClass().equals(player.getClass())) {
+            throw new IllegalArgumentException("Wrong code usage: simulated player must use same player class all the time. Need "
+                    + originalPlayer.getClass().getSimpleName() + ", but try to restore " + player.getClass().getSimpleName());
+        }
+
+        super.restore(player.getRealPlayer());
+    }
+
+    @Override
     public SimulatedPlayer2 copy() {
         return new SimulatedPlayer2(this);
     }
 
+    /**
+     * Find all playable abilities with all possible targets (targets already selected in ability)
+     */
     public List<Ability> simulatePriority(Game game) {
         allActions = new ConcurrentLinkedQueue<>();
         Game sim = game.createSimulationForAI();
@@ -149,7 +165,7 @@ public final class SimulatedPlayer2 extends ComputerPlayer {
                         }
                         newAbility.adjustTargets(game);
                         // add the different possible target option for the specific X value
-                        if (!newAbility.getTargets().getUnchosen().isEmpty()) {
+                        if (!newAbility.getTargets().getUnchosen(game).isEmpty()) {
                             addTargetOptions(options, newAbility, targetNum, game);
                         }
                     }
@@ -162,6 +178,10 @@ public final class SimulatedPlayer2 extends ComputerPlayer {
 
     protected List<Ability> optimizeOptions(Game game, List<Ability> options, Ability ability) {
         if (options.isEmpty()) {
+            return options;
+        }
+
+        if (AI_SIMULATE_ALL_BAD_AND_GOOD_TARGETS) {
             return options;
         }
 

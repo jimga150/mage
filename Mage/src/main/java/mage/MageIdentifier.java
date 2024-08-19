@@ -34,6 +34,7 @@ public enum MageIdentifier {
     KaghaShadowArchdruidWatcher,
     CourtOfLocthwainWatcher("Without paying manacost"),
     LaraCroftTombRaiderWatcher,
+    CoramTheUndertakerWatcher,
 
     // ----------------------------//
     //       alternate casts       //
@@ -67,8 +68,11 @@ public enum MageIdentifier {
     WorldheartPhoenixAlternateCast,
     XandersPactAlternateCast,
     TheTombOfAclazotzWatcher,
-
-    MeTheImmortalAlternateCast;
+    MeTheImmortalAlternateCast,
+    WithoutPayingManaCostAlternateCast,
+    AlurenAlternateCast,
+    OfferingAlternateCast,
+    PrimalPrayersAlternateCast;
 
     /**
      * Additional text if there is need to differentiate two very similar effects

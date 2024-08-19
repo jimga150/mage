@@ -15,6 +15,7 @@ import mage.cards.decks.Deck;
 import mage.choices.Choice;
 import mage.constants.*;
 import mage.counters.Counter;
+import mage.counters.CounterType;
 import mage.counters.Counters;
 import mage.designations.Designation;
 import mage.designations.DesignationType;
@@ -105,7 +106,11 @@ public interface Player extends MageItem, Copyable<Player> {
 
     void addAbility(Ability ability);
 
-    Counters getCounters();
+    /**
+     * The counters should be manipulated (adding or removing counters) with the appropriate addCounters/removeCounters/getCounterCount methods.
+     * This returns a copy for specific usage, to make sure the Player's counters are not altered from there.
+     */
+    Counters getCountersAsCopy();
 
     int getLife();
 
@@ -272,6 +277,7 @@ public interface Player extends MageItem, Copyable<Player> {
 
     void idleTimeout(Game game);
 
+    // TODO: research usage of !hasLeft() && !hasLost() replace it by isInGame() if possible
     boolean hasLeft();
 
     /**
@@ -291,7 +297,11 @@ public interface Player extends MageItem, Copyable<Player> {
 
     ManaPool getManaPool();
 
-    Set<UUID> getInRange();
+    /**
+     * Is checking player in range of current player.
+     * Warning, range list updates on start of the turn due rules.
+     */
+    boolean hasPlayerInRange(UUID checkingPlayerId);
 
     boolean isTopCardRevealed();
 
@@ -508,7 +518,7 @@ public interface Player extends MageItem, Copyable<Player> {
 
     boolean triggerAbility(TriggeredAbility ability, Game game);
 
-    boolean canBeTargetedBy(MageObject source, UUID sourceControllerId, Game game);
+    boolean canBeTargetedBy(MageObject sourceObject, UUID sourceControllerId, Ability source, Game game);
 
     boolean hasProtectionFrom(MageObject source, Game game);
 
@@ -558,7 +568,7 @@ public interface Player extends MageItem, Copyable<Player> {
 
     void abortReset();
 
-    void signalPlayerConcede();
+    void signalPlayerConcede(boolean stopCurrentChooseDialog);
 
     void signalPlayerCheat();
 
@@ -730,8 +740,8 @@ public interface Player extends MageItem, Copyable<Player> {
     // set the value for non mana X costs
     int announceXCost(int min, int max, String message, Game game, Ability ability, VariableCost variableCost);
 
-    // TODO: rework choose replacement effects to use array, not map (it'a random order now)
-    int chooseReplacementEffect(Map<String, String> abilityMap, Game game);
+    // TODO: rework to use pair's list of effect + ability instead string's map
+    int chooseReplacementEffect(Map<String, String> effectsMap, Map<String, MageObject> objectsMap, Game game);
 
     TriggeredAbility chooseTriggeredAbility(List<TriggeredAbility> abilities, Game game);
 
@@ -832,9 +842,44 @@ public interface Player extends MageItem, Copyable<Player> {
 
     Map<UUID, ActivatedAbility> getPlayableActivatedAbilities(MageObject object, Zone zone, Game originalGame);
 
+    /**
+     * add counter to the player (action verb is `get`, but not using that one to avoid ambiguity with getters)
+     */
     boolean addCounters(Counter counter, UUID playerAddingCounters, Ability source, Game game);
 
-    void removeCounters(String name, int amount, Ability source, Game game);
+    /**
+     * lose {@param amount} counters of the specified kind.
+     */
+    void loseCounters(String counterName, int amount, Ability source, Game game);
+
+    /**
+     * lose all counters of any kind.
+     *
+     * @return the amount of counters removed this way.
+     */
+    int loseAllCounters(Ability source, Game game);
+
+    /**
+     * lose all counters of a specific kind.
+     *
+     * @return the amount of counters removed this way.
+     */
+    int loseAllCounters(String counterName, Ability source, Game game);
+
+    /**
+     * @return the amount of counters of the specified kind the player has
+     */
+    int getCountersCount(CounterType counterType);
+
+    /**
+     * @return the amount of counters of the specified kind the player has
+     */
+    int getCountersCount(String counterName);
+
+    /**
+     * @return the amount of counters in total of any kind the player has
+     */
+    int getCountersTotalCount();
 
     List<UUID> getAttachments();
 
@@ -1210,4 +1255,10 @@ public interface Player extends MageItem, Copyable<Player> {
     }
 
     public UserData getControllingPlayersUserData(Game game);
+
+    /**
+     * Some player implementations (TestPlayer, Simulated) uses facade structure with hidden player object,
+     * so that's method helps to find real player that used by a game (in most use cases it's a PlayerImpl)
+     */
+    Player getRealPlayer();
 }

@@ -44,7 +44,7 @@ public final class TameshiRealityArchitect extends CardImpl {
         // Whenever one or more noncreature permanents are returned to hand, draw a card. This ability triggers only once each turn.
         this.addAbility(new ZoneChangeAllTriggeredAbility(Zone.BATTLEFIELD, Zone.BATTLEFIELD, Zone.HAND,
                 new DrawCardSourceControllerEffect(1), filter,
-                "Whenever one or more noncreature permanents are returned to hand, ", false).setTriggersOnceEachTurn(true));
+                "Whenever one or more noncreature permanents are returned to hand, ", false).setTriggersLimitEachTurn(1));
 
         // {X}{W}, Return a land you control to its owner's hand: Return target artifact or enchantment card with mana value X or less from your graveyard to the battlefield. Activate only as a sorcery.
         Ability ability = new ActivateAsSorceryActivatedAbility(
@@ -56,8 +56,8 @@ public final class TameshiRealityArchitect extends CardImpl {
         ability.addCost(new ReturnToHandChosenControlledPermanentCost(
                 new TargetControlledPermanent(StaticFilters.FILTER_CONTROLLED_PERMANENT_LAND)
         ));
-        ability.setTargetAdjuster(new XManaValueTargetAdjuster(ComparisonType.OR_LESS));
         ability.addTarget(new TargetCardInYourGraveyard(new FilterArtifactOrEnchantmentCard()));
+        ability.setTargetAdjuster(new XManaValueTargetAdjuster(ComparisonType.OR_LESS));
         this.addAbility(ability);
     }
 

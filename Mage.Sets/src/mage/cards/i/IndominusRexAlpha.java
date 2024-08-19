@@ -30,7 +30,7 @@ import mage.target.common.TargetDiscard;
  */
 public final class IndominusRexAlpha extends CardImpl {
 
-    private static final DynamicValue xValue = new CountersSourceCount(null);
+    private static final DynamicValue xValue = new CountersSourceCount();
 
     public IndominusRexAlpha(UUID ownerId, CardSetInfo setInfo) {
         super(ownerId, setInfo, new CardType[]{CardType.CREATURE}, "{1}{U/B}{U/B}{G}{G}");
@@ -47,7 +47,8 @@ public final class IndominusRexAlpha extends CardImpl {
         this.addAbility(new AsEntersBattlefieldAbility(new IndominusRexAlphaCountersEffect()));
 
         // When Indominus Rex enters the battlefield, draw a card for each counter on it.
-        this.addAbility(new EntersBattlefieldTriggeredAbility(new DrawCardSourceControllerEffect(xValue)));
+        this.addAbility(new EntersBattlefieldTriggeredAbility(new DrawCardSourceControllerEffect(xValue)
+                .setText("draw a card for each counter on it")));
     }
 
     private IndominusRexAlpha(final IndominusRexAlpha card) {
@@ -124,7 +125,7 @@ class IndominusRexAlphaCountersEffect extends OneShotEffect {
         controller.discard(new CardsImpl(target.getTargets()), false, source, game);
 
         //allow cards to move to graveyard before checking for abilities
-        game.getState().processAction(game);
+        game.processAction();
 
         // the basic event is the EntersBattlefieldEvent, so use already applied replacement effects from that event
         List<UUID> appliedEffects = (ArrayList<UUID>) this.getValue("appliedEffects");

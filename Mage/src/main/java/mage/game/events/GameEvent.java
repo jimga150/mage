@@ -247,6 +247,7 @@ public class GameEvent implements Serializable {
          */
         ACTIVATE_ABILITY, ACTIVATED_ABILITY,
         /* ACTIVATE_ABILITY, ACTIVATED_ABILITY,
+         WARNING, do not use choose dialogs inside, can be calls multiple types, e.g. on playable checking
          targetId    id of the ability to activate / use
          sourceId    sourceId of the object with that ability
          playerId    player that tries to use this ability
@@ -548,8 +549,8 @@ public class GameEvent implements Serializable {
          amount      number of counters being removed
          data        name of the counter(s) being removed
          */
-        REMOVE_COUNTER, REMOVE_COUNTERS,
-        COUNTER_REMOVED, COUNTERS_REMOVED,
+        REMOVE_COUNTER, COUNTER_REMOVED,
+        REMOVE_COUNTERS, COUNTERS_REMOVED,
         LOSE_CONTROL,
         /* LOST_CONTROL
          targetId    id of the creature that lost control
@@ -662,6 +663,18 @@ public class GameEvent implements Serializable {
          playerId   owner of the plotted card (the one able to cast the card)
          */
         BECOME_PLOTTED,
+        /* the player foraged
+         targetId   same as sourceId
+         sourceId   of the ability
+         playerId   player who foraged
+         */
+        FORAGED,
+        /* gave a gift
+         targetId   the player who received the gift
+         sourceId   of the ability
+         playerId   player who gave the gift
+         */
+        GAVE_GIFT,
         //custom events
         CUSTOM_EVENT
     }

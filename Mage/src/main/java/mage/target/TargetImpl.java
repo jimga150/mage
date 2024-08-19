@@ -106,7 +106,7 @@ public abstract class TargetImpl implements Target {
         if (min > 0 && max == Integer.MAX_VALUE) {
             sb.append(CardUtil.numberToText(min));
             sb.append(" or more ");
-        } else if (!getTargetName().startsWith("X") && (min != 1 || max != 1)) {
+        } else if (!getTargetName().startsWith("X ") && (min != 1 || max != 1)) {
             if (min < max && max != Integer.MAX_VALUE) {
                 if (min == 1 && max == 2) {
                     sb.append("one or ");
@@ -143,7 +143,7 @@ public abstract class TargetImpl implements Target {
     }
 
     @Override
-    public String getMessage() {
+    public String getMessage(Game game) {
         // UI choose message
         String suffix = "";
         if (this.chooseHint != null) {
@@ -177,8 +177,9 @@ public abstract class TargetImpl implements Target {
     }
 
     @Override
-    public void setTargetName(String name) {
+    public TargetImpl withTargetName(String name) {
         this.targetName = name;
+        return this;
     }
 
     @Override
@@ -215,7 +216,7 @@ public abstract class TargetImpl implements Target {
     }
 
     @Override
-    public boolean isChosen() {
+    public boolean isChosen(Game game) {
         if (getMaxNumberOfTargets() == 0 && getNumberOfTargets() == 0) {
             return true;
         }
@@ -223,7 +224,7 @@ public abstract class TargetImpl implements Target {
     }
 
     @Override
-    public boolean doneChoosing() {
+    public boolean doneChoosing(Game game) {
         return getMaxNumberOfTargets() != 0 && targets.size() == getMaxNumberOfTargets();
     }
 
@@ -332,7 +333,7 @@ public abstract class TargetImpl implements Target {
                 return chosen;
             }
             chosen = targets.size() >= getNumberOfTargets();
-        } while (!isChosen() && !doneChoosing());
+        } while (!isChosen(game) && !doneChoosing(game));
         return chosen;
     }
 
@@ -375,7 +376,7 @@ public abstract class TargetImpl implements Target {
                 }
             }
             chosen = targets.size() >= getNumberOfTargets();
-        } while (!isChosen() && !doneChoosing());
+        } while (!isChosen(game) && !doneChoosing(game));
 
         return chosen;
     }
