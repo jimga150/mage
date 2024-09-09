@@ -23,6 +23,7 @@ public final class AssassinsCreed extends ExpansionSet {
 
         cards.add(new SetCardInfo("Abstergo Entertainment", 79, Rarity.RARE, mage.cards.a.AbstergoEntertainment.class));
         cards.add(new SetCardInfo("Achilles Davenport", 294, Rarity.RARE, mage.cards.a.AchillesDavenport.class));
+        cards.add(new SetCardInfo("Adewale, Breaker of Chains", 44, Rarity.UNCOMMON, mage.cards.a.AdewaleBreakerOfChains.class));
         cards.add(new SetCardInfo("Arbaaz Mir", 46, Rarity.UNCOMMON, mage.cards.a.ArbaazMir.class));
         cards.add(new SetCardInfo("Arno Dorian", 47, Rarity.UNCOMMON, mage.cards.a.ArnoDorian.class));
         cards.add(new SetCardInfo("Assassin Den", 281, Rarity.UNCOMMON, mage.cards.a.AssassinDen.class));
@@ -35,12 +36,14 @@ public final class AssassinsCreed extends ExpansionSet {
         cards.add(new SetCardInfo("Battlefield Improvisation", 276, Rarity.COMMON, mage.cards.b.BattlefieldImprovisation.class));
         cards.add(new SetCardInfo("Bayek of Siwa", 50, Rarity.RARE, mage.cards.b.BayekOfSiwa.class));
         cards.add(new SetCardInfo("Black Market Connections", 87, Rarity.RARE, mage.cards.b.BlackMarketConnections.class));
+        cards.add(new SetCardInfo("Bleeding Effect", 51, Rarity.UNCOMMON, mage.cards.b.BleedingEffect.class));
         cards.add(new SetCardInfo("Brotherhood Ambushers", 285, Rarity.UNCOMMON, mage.cards.b.BrotherhoodAmbushers.class));
         cards.add(new SetCardInfo("Brotherhood Patriarch", 286, Rarity.COMMON, mage.cards.b.BrotherhoodPatriarch.class));
         cards.add(new SetCardInfo("Brotherhood Regalia", 71, Rarity.UNCOMMON, mage.cards.b.BrotherhoodRegalia.class, NON_FULL_USE_VARIOUS));
         cards.add(new SetCardInfo("Brotherhood Regalia", 255, Rarity.UNCOMMON, mage.cards.b.BrotherhoodRegalia.class, NON_FULL_USE_VARIOUS));
         cards.add(new SetCardInfo("Brotherhood Spy", 282, Rarity.UNCOMMON, mage.cards.b.BrotherhoodSpy.class));
         cards.add(new SetCardInfo("Bureau Headmaster", 296, Rarity.UNCOMMON, mage.cards.b.BureauHeadmaster.class));
+        cards.add(new SetCardInfo("Caduceus, Staff of Hermes", 2, Rarity.RARE, mage.cards.c.CaduceusStaffOfHermes.class));
         cards.add(new SetCardInfo("Cathartic Reunion", 94, Rarity.UNCOMMON, mage.cards.c.CatharticReunion.class));
         cards.add(new SetCardInfo("Chain Assassination", 23, Rarity.UNCOMMON, mage.cards.c.ChainAssassination.class));
         cards.add(new SetCardInfo("Cleopatra, Exiled Pharaoh", 52, Rarity.MYTHIC, mage.cards.c.CleopatraExiledPharaoh.class));
@@ -53,7 +56,9 @@ public final class AssassinsCreed extends ExpansionSet {
         cards.add(new SetCardInfo("Detained by Legionnaires", 277, Rarity.COMMON, mage.cards.d.DetainedByLegionnaires.class));
         cards.add(new SetCardInfo("Distract the Guards", 3, Rarity.UNCOMMON, mage.cards.d.DistractTheGuards.class));
         cards.add(new SetCardInfo("Eagle Vision", 17, Rarity.UNCOMMON, mage.cards.e.EagleVision.class));
+        cards.add(new SetCardInfo("Edward Kenway", 53, Rarity.MYTHIC, mage.cards.e.EdwardKenway.class));
         cards.add(new SetCardInfo("Eivor, Battle-Ready", 274, Rarity.MYTHIC, mage.cards.e.EivorBattleReady.class));
+        cards.add(new SetCardInfo("Eivor, Wolf-Kissed", 54, Rarity.MYTHIC, mage.cards.e.EivorWolfKissed.class));
         cards.add(new SetCardInfo("Escape Detection", 18, Rarity.UNCOMMON, mage.cards.e.EscapeDetection.class));
         cards.add(new SetCardInfo("Escarpment Fortress", 278, Rarity.RARE, mage.cards.e.EscarpmentFortress.class));
         cards.add(new SetCardInfo("Evie Frye", 19, Rarity.RARE, mage.cards.e.EvieFrye.class));
@@ -83,6 +88,7 @@ public final class AssassinsCreed extends ExpansionSet {
         cards.add(new SetCardInfo("Mary Read and Anne Bonny", 61, Rarity.RARE, mage.cards.m.MaryReadAndAnneBonny.class));
         cards.add(new SetCardInfo("Merciless Harlequin", 287, Rarity.COMMON, mage.cards.m.MercilessHarlequin.class));
         cards.add(new SetCardInfo("Misthios's Fury", 291, Rarity.COMMON, mage.cards.m.MisthiossFury.class));
+        cards.add(new SetCardInfo("Mjolnir, Storm Hammer", 74, Rarity.RARE, mage.cards.m.MjolnirStormHammer.class));
         cards.add(new SetCardInfo("Mortify", 96, Rarity.UNCOMMON, mage.cards.m.Mortify.class));
         cards.add(new SetCardInfo("Mountain", 107, Rarity.LAND, mage.cards.basiclands.Mountain.class, FULL_ART_BFZ_VARIOUS));
         cards.add(new SetCardInfo("Murder", 92, Rarity.UNCOMMON, mage.cards.m.Murder.class));
@@ -121,6 +127,7 @@ public final class AssassinsCreed extends ExpansionSet {
         cards.add(new SetCardInfo("Temporal Trespass", 86, Rarity.MYTHIC, mage.cards.t.TemporalTrespass.class));
         cards.add(new SetCardInfo("Terminate", 98, Rarity.UNCOMMON, mage.cards.t.Terminate.class));
         cards.add(new SetCardInfo("The Animus", 69, Rarity.RARE, mage.cards.t.TheAnimus.class));
+        cards.add(new SetCardInfo("The Capitoline Triad", 1, Rarity.MYTHIC, mage.cards.t.TheCapitolineTriad.class));
         cards.add(new SetCardInfo("The Revelations of Ezio", 31, Rarity.UNCOMMON, mage.cards.t.TheRevelationsOfEzio.class));
         cards.add(new SetCardInfo("The Spear of Leonidas", 38, Rarity.RARE, mage.cards.t.TheSpearOfLeonidas.class));
         cards.add(new SetCardInfo("Towering Viewpoint", 77, Rarity.UNCOMMON, mage.cards.t.ToweringViewpoint.class));
