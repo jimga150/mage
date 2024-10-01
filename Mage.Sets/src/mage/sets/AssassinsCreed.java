@@ -24,12 +24,14 @@ public final class AssassinsCreed extends ExpansionSet {
         cards.add(new SetCardInfo("Abstergo Entertainment", 79, Rarity.RARE, mage.cards.a.AbstergoEntertainment.class));
         cards.add(new SetCardInfo("Achilles Davenport", 294, Rarity.RARE, mage.cards.a.AchillesDavenport.class));
         cards.add(new SetCardInfo("Adewale, Breaker of Chains", 44, Rarity.UNCOMMON, mage.cards.a.AdewaleBreakerOfChains.class));
+        cards.add(new SetCardInfo("Adrestia", 68, Rarity.UNCOMMON, mage.cards.a.Adrestia.class));
         cards.add(new SetCardInfo("Arbaaz Mir", 46, Rarity.UNCOMMON, mage.cards.a.ArbaazMir.class));
         cards.add(new SetCardInfo("Arno Dorian", 47, Rarity.UNCOMMON, mage.cards.a.ArnoDorian.class));
         cards.add(new SetCardInfo("Assassin Den", 281, Rarity.UNCOMMON, mage.cards.a.AssassinDen.class));
         cards.add(new SetCardInfo("Assassin Gauntlet", 12, Rarity.UNCOMMON, mage.cards.a.AssassinGauntlet.class));
         cards.add(new SetCardInfo("Assassin Initiate", 22, Rarity.UNCOMMON, mage.cards.a.AssassinInitiate.class));
         cards.add(new SetCardInfo("Assassin's Trophy", 95, Rarity.RARE, mage.cards.a.AssassinsTrophy.class));
+        cards.add(new SetCardInfo("Aveline de Grandpre", 40, Rarity.RARE, mage.cards.a.AvelineDeGrandpre.class));
         cards.add(new SetCardInfo("Aya of Alexandria", 48, Rarity.RARE, mage.cards.a.AyaOfAlexandria.class));
         cards.add(new SetCardInfo("Ballad of the Black Flag", 13, Rarity.UNCOMMON, mage.cards.b.BalladOfTheBlackFlag.class));
         cards.add(new SetCardInfo("Basim Ibn Ishaq", 49, Rarity.RARE, mage.cards.b.BasimIbnIshaq.class));
@@ -107,6 +109,7 @@ public final class AssassinsCreed extends ExpansionSet {
         cards.add(new SetCardInfo("Rest in Peace", 83, Rarity.RARE, mage.cards.r.RestInPeace.class));
         cards.add(new SetCardInfo("Restart Sequence", 30, Rarity.UNCOMMON, mage.cards.r.RestartSequence.class));
         cards.add(new SetCardInfo("Rooftop Bypass", 298, Rarity.RARE, mage.cards.r.RooftopBypass.class));
+        cards.add(new SetCardInfo("Roshan, Hidden Magister", 32, Rarity.UNCOMMON, mage.cards.r.RoshanHiddenMagister.class));
         cards.add(new SetCardInfo("Royal Assassin", 93, Rarity.RARE, mage.cards.r.RoyalAssassin.class));
         cards.add(new SetCardInfo("Senu, Keen-Eyed Protector", 8, Rarity.RARE, mage.cards.s.SenuKeenEyedProtector.class));
         cards.add(new SetCardInfo("Settlement Blacksmith", 280, Rarity.UNCOMMON, mage.cards.s.SettlementBlacksmith.class));
@@ -115,6 +118,7 @@ public final class AssassinsCreed extends ExpansionSet {
         cards.add(new SetCardInfo("Silent Clearing", 115, Rarity.RARE, mage.cards.s.SilentClearing.class));
         cards.add(new SetCardInfo("Smoke Bomb", 75, Rarity.UNCOMMON, mage.cards.s.SmokeBomb.class));
         cards.add(new SetCardInfo("Spartan Veteran", 292, Rarity.COMMON, mage.cards.s.SpartanVeteran.class));
+        cards.add(new SetCardInfo("Staff of Eden, Vault's Key", 76, Rarity.MYTHIC, mage.cards.s.StaffOfEdenVaultsKey.class));
         cards.add(new SetCardInfo("Stone Quarry", 300, Rarity.UNCOMMON, mage.cards.s.StoneQuarry.class));
         cards.add(new SetCardInfo("Submerged Boneyard", 301, Rarity.UNCOMMON, mage.cards.s.SubmergedBoneyard.class));
         cards.add(new SetCardInfo("Sunbaked Canyon", 111, Rarity.RARE, mage.cards.s.SunbakedCanyon.class));
